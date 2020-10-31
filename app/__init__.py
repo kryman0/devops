@@ -40,7 +40,8 @@ def create_app(config_class=ProdConfig):
     bootstrap.init_app(app)
     
 
-    #pylint: disable=wrong-import-position, cyclic-import
+    # //Commented out: #pylint: disable=wrong-import-position, cyclic-import
+    #pylint: disable=imports
     from app.errors import bp as errors_bp
     app.register_blueprint(errors_bp)
 
@@ -49,7 +50,8 @@ def create_app(config_class=ProdConfig):
 
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
-    #pylint: enable=wrong-import-position, cyclic-import
+    #pylint: enable=imports
+    # //Commented out: #pylint: enable=wrong-import-position, cyclic-import
 
 
     if not app.debug and not app.testing:

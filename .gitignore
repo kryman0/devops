@@ -1,4 +1,3 @@
-.env
 app.db
 aws_keys.yml
 logs/
