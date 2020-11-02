@@ -5,7 +5,7 @@ jobs:
   build:
     docker:
       -
-        image: circle/python:3.7
+        image: circleci/python:3.7
     
     working_directory: ~/repo
 
