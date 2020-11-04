@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/circleci/circleci-docs.svg?style=svg)](https://app.circleci.com/pipelines/github/kryman0/devops)
+[![CircleCI](https://circleci.com/gh/kryman0/devops.svg?style=svg&circle-token=764a54f33d9610e7e99f63749702359e39ee50f5)](https://app.circleci.com/pipelines/github/kryman0/devops)
 
 <br />
 
