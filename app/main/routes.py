@@ -39,7 +39,8 @@ def index():
         flash('Your post is now live!')
         return redirect(url_for('main.index'))
 
-    posts = current_user.posts.all()
+    # posts = current_user.posts.all()
+    posts = current_user.followed_posts().all()
     return render_template("index.html", title='Home Page', form=form,
                            posts=posts)
 
@@ -63,7 +64,8 @@ def user(username):
     Route for user
     """
     user_ = User.query.filter_by(username=username).first_or_404()
-    posts = current_user.posts.all()
+    #posts = current_user.posts.all()
+    posts = user_.posts.all()
     return render_template('user.html', user=user_, posts=posts)
 
 
