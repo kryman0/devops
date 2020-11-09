@@ -1,0 +1,34 @@
+FROM debian:buster-slim
+
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y python3=3.7.3-1 python3-venv=3.7.3-1 make=4.2.1-1.2 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN adduser --disabled-password microblog_test
+
+WORKDIR /home/microblog_test
+
+# COPY app app
+# COPY migrations migrations
+COPY requirements requirements
+COPY requirements.txt microblog.py Makefile .coveragerc .pylintrc pytest.ini ./
+COPY scripts/microblog_test.sh ./
+
+RUN python3 -m venv .venv
+# ENV FLASK_APP microblog.py
+# RUN .venv/bin/pip3 install -r requirements.txt
+
+RUN chmod +x ./microblog_test.sh
+
+RUN chown -R microblog_test:microblog_test ./
+USER microblog_test
+
+RUN /bin/bash -c "source .venv/bin/activate; \
+make install-test"
+
+# CMD make install-test
+
+# RUN "make install-test"
+
+ENTRYPOINT ["./microblog_test.sh"]
