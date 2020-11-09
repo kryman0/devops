@@ -28,14 +28,10 @@ class EditProfileForm(FlaskForm):
     submit = SubmitField('Submit')
 
     def __init__(self, original_username, *args, **kwargs):
-<<<<<<< HEAD
         # Added my own pylint disablement.
         #pylint: disable=refactoring
         super(EditProfileForm, self).__init__(*args, **kwargs)
         #pylint: enable=refactoring
-=======
-        super().__init__(*args, **kwargs)
->>>>>>> upstream/master
         self.original_username = original_username
 
     def validate_username(self, username):

@@ -1,11 +1,8 @@
 """
 Test routes for routes for authorizing users, app/auth/routes
 """
-<<<<<<< HEAD
 # //Commented out (added the ellipsis for bypassing these two lines of comments):
 # # pylint...: disable=redefined-outer-name,bad-continuation,unused-argument
-=======
->>>>>>> upstream/master
 # pylint: disable=redefined-outer-name,unused-argument
 from flask import session
 
@@ -22,10 +19,7 @@ def test_register_login_login_register_when_logged_in(client, user_dict, registe
             data=user_dict,
             follow_redirects=True,
         )
-<<<<<<< HEAD
         # //Added an _ (underscore to the user_id key). Orig. code: assert session['user_id'] == "1"
-=======
->>>>>>> upstream/master
         assert session['_user_id'] == "1"
         assert response.status_code == 200
         assert b"Hi, doe!" in response.data # Check that was redirected to /index
