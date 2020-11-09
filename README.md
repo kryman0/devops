@@ -37,7 +37,7 @@ If you are on Windows and Cygwin you will probably have troubles installing the 
 
 ### Database
 
-Setup SQLite database if `migrations` folder file already exist:
+Setup SQLite database if `migrations` folder already exist:
 ```
 flask db upgrade
 ```
@@ -48,7 +48,7 @@ flask db migrate -m '<message>'
 flask db upgrade
 ```
 
-If you need to recreate `app.db` and migrations folder, you probably won't need this:
+You probably won't need to do this. But if you need to recreate `app.db` and migrations folder:
 ```
 flask db init
 flask db migrate -m '<message>'
