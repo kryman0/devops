@@ -9,15 +9,11 @@ RUN adduser --disabled-password microblog_test
 
 WORKDIR /home/microblog_test
 
-# COPY app app
-# COPY migrations migrations
 COPY requirements requirements
 COPY requirements.txt microblog.py Makefile .coveragerc .pylintrc pytest.ini ./
 COPY scripts/microblog_test.sh ./
 
 RUN python3 -m venv .venv
-# ENV FLASK_APP microblog.py
-# RUN .venv/bin/pip3 install -r requirements.txt
 
 RUN chmod +x ./microblog_test.sh
 
@@ -26,9 +22,5 @@ USER microblog_test
 
 RUN /bin/bash -c "source .venv/bin/activate; \
 make install-test"
-
-# CMD make install-test
-
-# RUN "make install-test"
 
 ENTRYPOINT ["./microblog_test.sh"]

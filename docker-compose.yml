@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  test:  
+    build:
+      context: ./
+      dockerfile: ./docker/Dockerfile_test
+
+    image: microblog_test:latest
+
+    container_name: microblog_test
+
+    volumes: 
+      - ./app:/home/microblog_test/app
+      - ./tests:/home/microblog_test/tests
+  
+  prod:
+    build:
+      context: ./
+      dockerfile: ./docker/Dockerfile_prod
+    
+    image: kryman/microblog:latest
+
+    container_name: microblog
+
+    ports:
+      - "8000:5000"
+    
+    networks: 
+      - microblog-network
+  
+  db:
+    image: mysql/mysql-server:5.7
+
+    container_name: mysql
+
+    env_file: mysql.env
+
+    volumes: 
+      - /var/lib/mysql:/var/lib/mysql
+    
+    networks: 
+      - microblog-network
+  
+networks: 
+  microblog-network:
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.16.238.0/24"

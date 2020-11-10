@@ -1,4 +1,6 @@
-#!/bin/bash
+#! /bin/bash
+
+set -eu
 
 source .venv/bin/activate
 
