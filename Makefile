@@ -158,10 +158,11 @@ exec-tests: test-unit test-integration
 
 # target: test                         - Run tests in Docker and display code coverage
 .PHONY: test
-test:
-	@docker-compose up test
-	${py} -m coverage report  --rcfile=.coveragerc
-	$(MAKE) clean-cov
+test:	
+	@docker run --rm \
+		-v $(CURDIR)/app:/home/microblog_test/app \
+		-v $(CURDIR)/tests:/home/microblog_test/tests \
+		kryman/microblog_test:latest
 
 
 
