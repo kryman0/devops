@@ -59,7 +59,7 @@ workflows:
           #   - test
           context: all_projects
           filters:
-            # branches:
-            #   only: master
+            branches:
+              ignore: /.*/
             tags:
-              only: /^2.*/
+              only: /^v2.*/
