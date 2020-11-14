@@ -62,4 +62,4 @@ workflows:
             # branches:
             #   only: master
             tags:
-              only: /^v3.*/
+              only: /^2.*/
