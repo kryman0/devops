@@ -4,11 +4,10 @@ version: 2.1
 jobs:
   test:
     docker:
-      -
-        image: circlecli/mysql:latest
-        auth:
-          username: kryman
-          password: $DOCKER_PASSWORD
+        - image: circleci/python:3.7
+          auth:
+            username: kryman
+            password: $DOCKER_PASSWORD
 
     #working_directory: ~/repo
 
