@@ -60,4 +60,4 @@ workflows:
             branches:
               only: master
             tags:
-              only: /^v2/
+              only: /^v1/
