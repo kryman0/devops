@@ -60,7 +60,7 @@ workflows:
           context: all_projects
           filters:
             tags:
-              only: /^v2.*/
+              only: /^v1.*/
             branches:
               ignore: /.*/
             
