@@ -52,20 +52,16 @@ workflows:
       - 
         test:
           context: all_projects
-          filters:
-            branches:
-              only: master
-            tags:
-              only: /^v2.*/
-
+  build_docker_workflow:
+    jobs:
       - 
         build_docker:
-          requires:
-            - test
+          # requires:
+          #   - test
           context: all_projects
           filters:
             tags:
-              only: v1.0.0
-            branches:
-              ignore: master
+              only: v2
+            # branches:
+            #   ignore: master
             
