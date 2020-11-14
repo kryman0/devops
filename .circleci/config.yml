@@ -56,7 +56,7 @@ workflows:
             branches:
               only: master
             tags:
-              only: /.*/
+              only: /^v2.*/
 
       - 
         build_docker:
