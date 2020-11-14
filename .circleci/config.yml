@@ -2,10 +2,10 @@
 version: 2.1
 
 jobs:
-  build:
+  test:
     docker:
       -
-        image: circlecli/python:3.7.4-buster
+        image: "circlecli/python:3.7.4-buster"
         auth:
           username: kryman
           password: $DOCKER_PASSWORD
@@ -61,7 +61,7 @@ workflows:
   test_and_build-docker:
     jobs:
       - 
-        build:
+        test:
           context: All projects
 
       # - 
