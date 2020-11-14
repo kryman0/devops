@@ -57,11 +57,15 @@ jobs:
 
 
 workflows:
-  version: 2.1
+  version: 2.1  
   test_and_build-docker:
     jobs:
-      - test
-      - build_docker:
+      - 
+        test:
+        context: All projects
+
+      - 
+        build_docker:
           requires:
             - test
           context: All projects
