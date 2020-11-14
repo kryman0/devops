@@ -65,7 +65,7 @@ workflows:
           context: all_projects
           filters:
             tags:
-              only: v2.0.0
-            # branches:
-            #   ignore: master
+              only: v1.0.0
+            branches:
+              ignore: master
             
