@@ -60,7 +60,7 @@ workflows:
           context: all_projects
           filters:
             tags:
-              only: /^config-test.*/
+              only: config
             # branches:
             #   only: master
             
