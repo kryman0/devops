@@ -35,18 +35,18 @@ jobs:
       
   # Step 4: If all tests succeeds, build the production
   # docker image and push it to dockerhub.
-  build_docker:
-    machine:
-      image: ubuntu-2004:202010-01
+  # build_docker:
+  #   machine:
+  #     image: ubuntu-2004:202010-01
 
-    steps:
-      -
-        run:
-          name: build and push docker image
-          command: |
-            docker login -u kryman -p $DOCKER_PASSWORD
-            docker build -t kryman/microblog:latest -f docker/Dockerfile_prod .
-            docker push kryman/microblog:latest
+  #   steps:
+  #     -
+  #       run:
+  #         name: build and push docker image
+  #         command: |
+  #           docker login -u kryman -p $DOCKER_PASSWORD
+  #           docker build -t kryman/microblog:latest -f docker/Dockerfile_prod .
+  #           docker push kryman/microblog:latest
       # -
       #   run:
       #     name: build and push docker image
@@ -62,15 +62,15 @@ workflows:
     jobs:
       - 
         test:
-          context: "All projects"
-
-      - 
-        build_docker:
-          requires:
-            - test
           context: All projects
-          filters:
-            branches:
-              only: master            
-            tags:
-              only: /^v2/
+
+      # - 
+      #   build_docker:
+      #     requires:
+      #       - test
+      #     context: All projects
+      #     filters:
+      #       branches:
+      #         only: master            
+      #       tags:
+      #         only: /^v2/
