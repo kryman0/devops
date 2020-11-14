@@ -6,6 +6,9 @@ jobs:
     docker:
       -
         image: circlecli/python:3.7.4-buster
+        auth:
+          username: kryman
+          password: $DOCKER_PASSWORD
 
     #working_directory: ~/repo
 
