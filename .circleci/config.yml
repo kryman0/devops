@@ -59,7 +59,8 @@ workflows:
           #   - test
           context: all_projects
           filters:
+            tags:
+              only: /^v2.*/
             branches:
               ignore: /.*/
-            tags:
-              only: /^v1.*/
+            
