@@ -2,8 +2,8 @@
 version: 2.1
 
 jobs:
-  test_proj_and_build_docker_img:
-    machine:
+  test:
+    machine: 
         image: ubuntu-2004:202010-01
 
     steps:
@@ -27,15 +27,20 @@ jobs:
             source venv/bin/activate
             make test
       
-      # Step 4: If all tests succeeds, build the production
-      # docker image and push it to dockerhub.
+  # Step 4: If all tests succeeds, build the production
+  # docker image and push it to dockerhub.
+  build_docker:
+    machine:
+      image: ubuntu-2004:202010-01
+
+    steps:
       -
         run:
           name: build and push docker image
           command: |
             docker login -u kryman -p $DOCKER_PASSWORD
             docker build -t kryman/microblog:latest -f docker/Dockerfile_prod .
-            docker push kryman/microblog:latest      
+            docker push kryman/microblog:latest
 
 
 workflows:
@@ -43,10 +48,16 @@ workflows:
   test_and_build-docker:
     jobs:
       - 
-        test_proj_and_build_docker_img:
+        test:
+          context: all_projects
+
+      - 
+        build_docker:
+          requires:
+            - test
           context: all_projects
           filters:
             branches:
-              only: master            
+              only: master
             tags:
               only: /^v2/
