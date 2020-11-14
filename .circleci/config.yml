@@ -2,63 +2,34 @@
 version: 2.1
 
 jobs:
-  # branch_tag_check:
-  #   docker:
-  #   steps:
-  #     -
-  #       run:
-  #         name: check that branch and tags conditions are met
-  #         command: |
-  #           if [[ ! $CIRCLE_BRANCH == "master" && \
-  #              $CIRCLE_TAG == "v2.0.0" ]]
-  #           then
-  #             exit 1
-  #           fi
-
-  # test:
-  #   machine: 
-  #       image: ubuntu-2004:202010-01
-
-  #   steps:
-      # Step 1: obtain repo from GitHub.
-      # -
-      #   checkout
-      # Step 2: create virtual env and install deps.
-      # -
-      #   run:
-      #     name: install dependencies
-      #     command: |
-      #       python3 -m venv venv
-      #       source venv/bin/activate
-      #       make install-dev
-            
-      # # Step 3: run linter and tests.
-      # -
-      #   run:
-      #     name: run tests
-      #     command: |
-      #       source venv/bin/activate
-      #       make test
-      
-  # Step 4: If all tests succeeds, build the production
-  # docker image and push it to dockerhub.
-  build_docker:
-    machine:
-      image: ubuntu-2004:202010-01
-    
-    working_directory: ~/repo
+  build:
+    machine: 
+        image: ubuntu-2004:202010-01
 
     steps:
+      # Step 1: obtain repo from GitHub.
+      -
+        checkout
+      
+      # Step 2: create virtual env and install deps.
       -
         run:
-          name: check that branch and tags conditions are met
+          name: install dependencies
           command: |
-            if [[ ! $CIRCLE_BRANCH == "master" && \
-               $CIRCLE_TAG == "v2.0.0" ]]
-            then
-              exit 1
-            fi
-
+            python3 -m venv venv
+            source venv/bin/activate
+            make install-dev
+            
+      # Step 3: run linter and tests.
+      -
+        run:
+          name: run tests
+          command: |
+            source venv/bin/activate
+            make test
+      
+      # Step 4: If all tests succeeds, build the production
+      # docker image and push it to dockerhub.
       -
         run:
           name: build and push docker image
@@ -72,21 +43,9 @@ workflows:
   version: 2.1  
   test_and_build-docker:
     jobs:
-      # - 
-      #   test:
-      #     context: all_projects
-      #     filters:
-      #       branches:
-      #         only: master
-
       - 
-        build_docker:
-          # requires:
-          #   - branch_tag_check
+        build:
           context: all_projects
-          # filters:
-          #   tags:
-          #     only: v1.0.0
-          #   branches:
-          #     ignore: master
-            
+          filters:
+            branches:
+              only: master
