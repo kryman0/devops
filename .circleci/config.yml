@@ -60,7 +60,7 @@ workflows:
           context: all_projects
           filters:
             tags:
-              only: config
-            # branches:
-            #   only: master
+              only: v1.1.0
+            branches:
+              ignore: master
             
