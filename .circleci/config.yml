@@ -2,7 +2,7 @@
 version: 2.1
 
 jobs:
-  test:
+  build:
     docker:
       -
         image: circlecli/python:3.7.4-buster
@@ -61,7 +61,7 @@ workflows:
   test_and_build-docker:
     jobs:
       - 
-        test:
+        build:
           context: All projects
 
       # - 
