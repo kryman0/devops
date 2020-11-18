@@ -1,0 +1,12 @@
+packages: 
+  - fail2ban
+  - tmux
+  - git
+  - unattended-upgrades
+
+root_password: $6$husLX4iVJKfFjBEy$xRln1w/qgkGe1dAGcEkRVXXmrKR8ehQwyk9iT4IbJMYaI1RCR0j9oHFKqyGA5Jv8IaZm3AC9aVcdCcLffOw.6.
+
+server_user: deploy
+server_user_password: $6$3oX/iTCEg9beSqIg$cR4r4jZ.0OmqNKPLwCVZftzTNaAVrd8HsFQUbwSMcqbXEqQcaBLxBh3mJ2DwHHO2VjT7FRBMIT6PjJQpzy5.l/
+server_user_groups:
+  - sudo
