@@ -1,0 +1,13 @@
+-
+  name: Set root password
+  user:
+    name: root
+    password: "{{ root_password }}"
+
+-
+  name: Update apt-cache and upgrade
+  apt:
+    update_cache: yes
+    upgrade: yes
+    cache_valid_time: 3600
+    force_apt_get: yes
