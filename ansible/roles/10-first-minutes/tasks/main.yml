@@ -1,98 +1,98 @@
-# -
-#   name: Set root password
-#   user:
-#     name: root
-#     password: "{{ root_password }}"
+-
+  name: Set root password
+  user:
+    name: root
+    password: "{{ root_password }}"
 
-# -
-#   name: Update apt-cache and upgrade
-#   apt:
-#     update_cache: yes
-#     upgrade: yes
-#     cache_valid_time: 3600
-#     force_apt_get: yes
+-
+  name: Update apt-cache and upgrade
+  apt:
+    update_cache: yes
+    upgrade: yes
+    cache_valid_time: 3600
+    force_apt_get: yes
 
-# -
-#   name: Install packages
-#   apt:
-#     force_apt_get: yes
-#     name: "{{ packages }}"
+-
+  name: Install packages
+  apt:
+    force_apt_get: yes
+    name: "{{ packages }}"
 
-# -
-#   name: Copy 10periodic settings
-#   copy:
-#     src: files/10periodic
-#     dest: /etc/apt/apt.conf.d/10periodic
+-
+  name: Copy 10periodic settings
+  copy:
+    src: files/10periodic
+    dest: /etc/apt/apt.conf.d/10periodic
 
-# -
-#   name: Copy 50unattended-upgrades settings
-#   copy:
-#     src: files/50unattended-upgrades
-#     dest: /etc/apt/apt.conf.d/50unattended-upgrades
+-
+  name: Copy 50unattended-upgrades settings
+  copy:
+    src: files/50unattended-upgrades
+    dest: /etc/apt/apt.conf.d/50unattended-upgrades
 
-# -
-#   name: Create user
-#   user:
-#     name: "{{ server_user }}"
-#     password: "{{ server_user_password }}"
-#     state: present
-#     shell: /bin/bash
-#     groups: "{{ server_user_groups }}"
+-
+  name: Create user
+  user:
+    name: "{{ server_user }}"
+    password: "{{ server_user_password }}"
+    state: present
+    shell: /bin/bash
+    groups: "{{ server_user_groups }}"
 
-# -
-#   name: Add ssh-key for new user
-#   authorized_key:
-#     user: "{{ server_user }}"
-#     state: present
-#     key: "{{ lookup('file', '/home/kryman/.ssh/azure_ci.pub') }}"
+-
+  name: Add ssh-key for new user
+  authorized_key:
+    user: "{{ server_user }}"
+    state: present
+    key: "{{ lookup('file', '/home/kryman/.ssh/azure_ci.pub') }}"
 
-# -
-#   name: Disallow root ssh access
-#   lineinfile:
-#     path: /etc/ssh/sshd_config
-#     regexp: "^PermitRootLogin"
-#     line: "PermitRootLogin no"
-#     state: present
-#   notify:
-#     -
-#       Restart ssh
+-
+  name: Disallow root ssh access
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^PermitRootLogin"
+    line: "PermitRootLogin no"
+    state: present
+  notify:
+    -
+      Restart ssh
 
-# -
-#   name: Disallow password authentication
-#   lineinfile:
-#     path: /etc/ssh/sshd_config
-#     regexp: "^PasswordAuthentication"
-#     line: "PasswordAuthentication no"
-#     state: present
-#   notify:
-#     -
-#       Restart ssh
+-
+  name: Disallow password authentication
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^PasswordAuthentication"
+    line: "PasswordAuthentication no"
+    state: present
+  notify:
+    -
+      Restart ssh
 
-# -
-#   name: Force all notified handlers to run at this point
-#   meta: flush_handlers
+-
+  name: Force all notified handlers to run at this point
+  meta: flush_handlers
 
-# -
-#   name: Add user to sudoers
-#   lineinfile:
-#     path: /etc/sudoers
-#     regexp: "{{ server_user }} ALL"
-#     line: "{{ server_user }} ALL=(ALL) NOPASSWD: ALL"
-#     state: present
+-
+  name: Add user to sudoers
+  lineinfile:
+    path: /etc/sudoers
+    regexp: "{{ server_user }} ALL"
+    line: "{{ server_user }} ALL=(ALL) NOPASSWD: ALL"
+    state: present
 
-# -
-#   name: Only allow user to ssh access
-#   lineinfile:
-#     path: /etc/ssh/sshd_config
-#     regexp: "^AllowUsers"
-#     line: "AllowUsers {{ server_user }}"
-#     state: present
+-
+  name: Only allow user to ssh access
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^AllowUsers"
+    line: "AllowUsers {{ server_user }}"
+    state: present
 
-# -
-#   name: Remove default user
-#   remote_user: "{{ server_user }}"
-#   user:
-#     name: azureuser
-#     state: absent
-#     force: yes
-#     remove: yes
+-
+  name: Remove default user
+  remote_user: "{{ server_user }}"
+  user:
+    name: azureuser
+    state: absent
+    force: yes
+    remove: yes

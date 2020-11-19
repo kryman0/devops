@@ -1,0 +1,6 @@
+-
+  name: Stop container
+  shell: |
+    docker stop microblog
+  args:
+    warn: no

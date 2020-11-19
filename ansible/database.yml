@@ -1,0 +1,8 @@
+-
+  hosts:
+    - database
+  remote_user: "{{ database_user }}"
+  become: yes
+  become_method: sudo
+  roles:
+    - database

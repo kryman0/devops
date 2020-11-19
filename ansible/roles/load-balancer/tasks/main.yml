@@ -1,0 +1,32 @@
+# -
+#   name: Install the prerequisites to nginx.
+#   apt:
+#     force_apt_get: yes
+#     update_cache: yes
+#     name:
+#       - curl 
+#       - gnupg2 
+#       - ca-certificates 
+#       - lsb-release
+#     install_recommends: yes
+
+# -
+#   name: Set up the apt repository for stable nginx packages.
+#   shell: |
+#     echo "deb http://nginx.org/packages/debian `lsb_release -cs` nginx" \
+#     | tee /etc/apt/sources.list.d/nginx.list
+#     curl -fsSL https://nginx.org/keys/nginx_signing.key | apt-key add -
+#   args:
+#     executable: /bin/bash
+#     warn: no
+
+# -
+#   name: Import an official nginx signing key so apt could verify the packages authenticity.
+#   shell: curl -fsSL https://nginx.org/keys/nginx_signing.key | apt-key add -
+
+# -
+#   name: Install nginx.
+#   apt:
+#     force_apt_get: yes
+#     update_cache: yes
+#     name: nginx

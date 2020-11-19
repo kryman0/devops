@@ -13,4 +13,4 @@ vmtags:
 pub_ssh_key_location: /home/kryman/.ssh/azure_ci.pub # Change me, your local ssh key!
 
 # My own variables:
-# root_password: $6$husLX4iVJKfFjBEy$xRln1w/qgkGe1dAGcEkRVXXmrKR8ehQwyk9iT4IbJMYaI1RCR0j9oHFKqyGA5Jv8IaZm3AC9aVcdCcLffOw.6.
+deploy_user: deploy
