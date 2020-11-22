@@ -2,43 +2,43 @@
 version: 2.1
 
 jobs:
-  # build:
-  #   machine: 
-  #       image: ubuntu-2004:202010-01
-
-  #   steps:
-  #     # Step 1: obtain repo from GitHub.
-  #     -
-  #       checkout
-      
-  #     # Step 2: create virtual env and install deps.
-  #     -
-  #       run:
-  #         name: install dependencies
-  #         command: |
-  #           python3 -m venv venv
-  #           source venv/bin/activate
-  #           make install-dev
-            
-  #     # Step 3: run linter and tests.
-  #     -
-  #       run:
-  #         name: run tests
-  #         command: |
-  #           source venv/bin/activate
-  #           make test
-      
-  #     # Step 4: If all tests succeeds, build the production
-  #     # docker image and push it to dockerhub.
-  #     -
-  #       run:
-  #         name: build and push docker image
-  #         command: |
-  #           docker login -u kryman -p $DOCKER_PASSWORD
-  #           docker build -t kryman/microblog:latest -f docker/Dockerfile_prod .
-  #           docker push kryman/microblog:latest
-
   build:
+    machine: 
+        image: ubuntu-2004:202010-01
+
+    steps:
+      # Step 1: obtain repo from GitHub.
+      -
+        checkout
+      
+      # Step 2: create virtual env and install deps.
+      -
+        run:
+          name: install dependencies
+          command: |
+            python3 -m venv venv
+            source venv/bin/activate
+            make install-dev
+            
+      # Step 3: run linter and tests.
+      -
+        run:
+          name: run tests
+          command: |
+            source venv/bin/activate
+            make test
+      
+      # Step 4: If all tests succeeds, build the production
+      # docker image and push it to dockerhub.
+      -
+        run:
+          name: build and push docker image
+          command: |
+            docker login -u kryman -p $DOCKER_PASSWORD
+            docker build -t kryman/microblog:latest -f docker/Dockerfile_prod .
+            docker push kryman/microblog:latest
+
+  deploy_appServer:
     machine: 
         image: ubuntu-2004:202010-01
     steps:
@@ -68,17 +68,17 @@ jobs:
             ansible-playbook -vvv gather_vm_instances.yml app_server.yml
 
 
-# workflows:
-#   version: 2.1  
-#   test_and_build-docker:
-#     jobs:
-#       - 
-#         build:
-#           context: all_projects
-#           filters:
-#             branches:
-#               only: master
-#       -
-#         deploy_appServer:
-#           requires:
-#             - build
+workflows:
+  version: 2.1  
+  test_and_build-docker:
+    jobs:
+      - 
+        build:
+          context: all_projects
+          filters:
+            branches:
+              only: master
+      -
+        deploy_appServer:
+          requires:
+            - build
