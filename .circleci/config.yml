@@ -38,6 +38,30 @@ jobs:
             docker build -t kryman/microblog:latest -f docker/Dockerfile_prod .
             docker push kryman/microblog:latest
 
+  deploy_appServer:
+    machine: 
+        image: ubuntu-2004:202010-01
+      steps:
+        # Deploy appServer.
+        - checkout        
+        -
+          run:
+            name: Install venv environment.
+            command: |
+              python3 -m venv .venv
+        -
+          run: 
+            name: Activate venv in each step.
+            command: echo "source .venv/bin/activate" >> $BASH_ENV
+        -
+          run:
+            name: Install dependencies for deployment.
+            command: make install-deploy
+        -
+          run:
+          name: Deploy appServer via Ansible.
+          command: ansible-playbook gather_vm_instances.yml app_server.yml
+
 
 workflows:
   version: 2.1  
@@ -49,3 +73,6 @@ workflows:
           filters:
             branches:
               only: master
+        deploy_appServer:
+          requires:
+            - build
