@@ -61,7 +61,7 @@ jobs:
           name: Deploy appServer via Ansible.
           command: |
             cd ansible
-            ansible-playbook gather_vm_instances.yml app_server.yml
+            ansible-playbook -vvv gather_vm_instances.yml app_server.yml
 
 
 # workflows:
