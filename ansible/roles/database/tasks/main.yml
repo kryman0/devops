@@ -49,23 +49,13 @@
       - containerd.io
     install_recommends: yes
   
-# -
-#   name: Create a volume to map to docker container.
-#   file:
-#     path: /home/{{ deploy_user }}/data/mysql/dbs/microblog
-#     state: directory
-
 -
   name: Pull the MySQL Docker container.
   shell: docker pull mysql:latest
 
-# -
-#   name: Prune the containers.
-#   shell: docker container prune -f
-
 -
-  name: Stop the container if it's running.
-  command: |
+  name: Stop the container.
+  shell: |
     docker stop mysql
     docker container prune -f
   args:
@@ -77,19 +67,13 @@
   copy:
     src: files/my.cnf
     dest: /home/deploy/mysql_custom.cnf
-  # register: copied_conf
 
 -
   name: Start the MySQL Docker container.
   shell: |    
     docker run --restart=always --name mysql --ip={{ groups.database[0] }} -d -p 3306:3306 \
     -v /home/{{ deploy_user }}/data/mysql/dbs/microblog:/var/lib/mysql -v /home/{{ deploy_user }}:/etc/mysql/conf.d \
-    -e MYSQL_DATABASE=microblog -e MYSQL_USER=microblog -e MYSQL_PASSWORD=kry_db \
+    -e MYSQL_DATABASE=microblog -e MYSQL_USER=microblog -e MYSQL_PASSWORD={{ lookup('env', 'MYSQL_PASSWORD') }} \
     -e MYSQL_ROOT_PASSWORD={{ lookup('env', 'MYSQL_ROOT_PASSWORD') }} mysql:latest
   args:
     executable: /bin/bash
-  # when: copied_conf is succeeded
-
-# -
-#   name: To reconnect to the database due to connection breaks.
-#   shell: docker exec -it mysql mysql -umicroblog -p{{ lookup('env', 'MYSQL_PASSWORD') }} -Dmicroblog -e "select * from user;"
