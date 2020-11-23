@@ -59,13 +59,15 @@
   name: Pull the MySQL Docker container.
   shell: docker pull mysql:latest
 
--
-  name: Prune the containers.
-  shell: docker container prune -f
+# -
+#   name: Prune the containers.
+#   shell: docker container prune -f
 
 -
   name: Stop the container if it's running.
-  command: docker stop mysql
+  command: |
+    docker stop mysql
+    docker container prune -f
   args:
     warn: no
   ignore_errors: yes
@@ -82,7 +84,7 @@
   shell: |    
     docker run --restart=always --name mysql --ip={{ groups.database[0] }} -d -p 3306:3306 \
     -v /home/{{ deploy_user }}/data/mysql/dbs/microblog:/var/lib/mysql -v /home/{{ deploy_user }}:/etc/mysql/conf.d \
-    -e MYSQL_DATABASE=microblog -e MYSQL_USER=microblog -e MYSQL_PASSWORD={{ lookup('env', 'MYSQL_PASSWORD') }} \
+    -e MYSQL_DATABASE=microblog -e MYSQL_USER=microblog -e MYSQL_PASSWORD=kry_db \
     -e MYSQL_ROOT_PASSWORD={{ lookup('env', 'MYSQL_ROOT_PASSWORD') }} mysql:latest
   args:
     executable: /bin/bash
