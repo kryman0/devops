@@ -1,0 +1,36 @@
+# Installing the Node Exporter
+
+# -
+#   name: Download and extract the file.
+#   shell: |
+#     wget \
+#     https://github.com/prometheus/node_exporter/releases/download/v1.0.1/node_exporter-1.0.1.linux-amd64.tar.gz    
+    
+#     tar xvzf node_exporter-1.0.1.linux-amd64.tar.gz
+  
+# -
+#   name: Create a node exporter user.
+#   command: useradd -rs /bin/false node_exporter
+
+# -
+#   name: Copy the binary file.
+#   copy:
+#     src: ./node_exporter-1.0.1.linux-amd64/node_exporter
+#     dest: /usr/local/bin
+#     remote_src: yes
+
+# -
+#   name: Apply the correct permissions to the binary file.
+#   file:
+#     owner: node_exporter
+#     group: node_exporter
+#     path: /usr/local/bin/node_exporter
+#     mode: +x
+
+# -
+#   name: Reload the daemon, and start the service.
+#   systemd:
+#     daemon_reload: yes
+#     name: node_exporter
+#     state: started
+#     enabled: yes

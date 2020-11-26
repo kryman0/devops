@@ -60,14 +60,14 @@
 
 -
   name: Remove all stopped containers .
-  command: docker container prune -f  
-  register: removed_container
+  command: docker container prune -f
+
+# Worked when added double quotes around ninja templates.  
 -
   name: Start the microblog container.
   shell: |
     docker run --restart=always --name microblog -d -p 8000:5000 \
-    -e DATABASE_URL=mysql+pymysql://microblog:{{ lookup('env', 'MYSQL_PASSWORD') }}@{{ groups.database[0] }}/microblog \
+    -e DATABASE_URL=mysql+pymysql://microblog:"{{ lookup('env', 'MYSQL_PASSWORD') }}"@"{{ groups.database[0] }}"/microblog \
     kryman/microblog:latest
   args:
     executable: /bin/bash
-  # when: removed_container is failed

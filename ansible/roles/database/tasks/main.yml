@@ -68,12 +68,13 @@
     src: files/my.cnf
     dest: /home/deploy/mysql_custom.cnf
 
+# Wrapped the ninja templates with double quotes. If it won't work, I know why.
 -
   name: Start the MySQL Docker container.
   shell: |    
-    docker run --restart=always --name mysql --ip={{ groups.database[0] }} -d -p 3306:3306 \
-    -v /home/{{ deploy_user }}/data/mysql/dbs/microblog:/var/lib/mysql -v /home/{{ deploy_user }}:/etc/mysql/conf.d \
-    -e MYSQL_DATABASE=microblog -e MYSQL_USER=microblog -e MYSQL_PASSWORD={{ lookup('env', 'MYSQL_PASSWORD') }} \
-    -e MYSQL_ROOT_PASSWORD={{ lookup('env', 'MYSQL_ROOT_PASSWORD') }} mysql:latest
+    docker run --restart=always --name mysql --ip="{{ groups.database[0] }}" -d -p 3306:3306 \
+    -v /home/"{{ deploy_user }}"/data/mysql/dbs/microblog:/var/lib/mysql -v /home/"{{ deploy_user }}":/etc/mysql/conf.d \
+    -e MYSQL_DATABASE=microblog -e MYSQL_USER=microblog -e MYSQL_PASSWORD="{{ lookup('env', 'MYSQL_PASSWORD') }}" \
+    -e MYSQL_ROOT_PASSWORD="{{ lookup('env', 'MYSQL_ROOT_PASSWORD') }}" mysql:latest
   args:
     executable: /bin/bash

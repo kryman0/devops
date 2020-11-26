@@ -1,0 +1,8 @@
+-
+  hosts: monitoring
+  remote_user: "{{ deploy_user }}"
+  become: yes
+  become_method: sudo
+  roles:
+    - node-exporter
+    # - monitoring

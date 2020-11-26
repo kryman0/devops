@@ -1,0 +1,10 @@
+# Installation of Prometheus and Grafana.
+
+-
+  name: Testing.
+  command: echo it works!
+
+# -
+#   name: Including the Node Exporter.
+#   include_role: 
+#     name: node-exporter
