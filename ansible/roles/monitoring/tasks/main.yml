@@ -1,10 +1,54 @@
 # Installation of Prometheus and Grafana.
 
+# -
+#   name: Set root password
+#   user:
+#     name: root
+#     password: "{{ root_password }}"
+
+# # Prometheus.
+# -
+#   name: Download and extract the file.
+#   shell: |
+#     wget \
+#       https://github.com/prometheus/prometheus/releases/download/v2.22.2/prometheus-2.22.2.linux-amd64.tar.gz
+
+#     tar xvzf prometheus-2.22.2.linux-amd64.tar.gz
+
 -
-  name: Testing.
-  command: echo it works!
+  name: Change the configuration.
+  template:
+    src: files/prometheus.yml.j2
+    dest: prometheus-2.22.2.linux-amd64/prometheus.yml
 
 # -
-#   name: Including the Node Exporter.
-#   include_role: 
-#     name: node-exporter
+#   name: Launch Prometheus as a background process.
+#   shell: ./prometheus-2.22.2.linux-amd64/prometheus &
+
+
+# Grafana.
+# -
+#   name: Download and extract the file.
+#   apt:
+#     force_apt_get: yes
+#     install_recommends: yes
+#     name:
+#       - adduser
+#       - libfontconfig1
+
+# -
+#   name: Download the .deb file.
+#   shell: wget https://dl.grafana.com/oss/release/grafana_7.3.4_amd64.deb
+
+# -
+#   name: Extract the .deb file and Grafana should automatically start as a service.
+#   apt:
+#     deb: grafana_7.3.4_amd64.deb
+
+-
+  name: Start the server with systemd.
+  systemd:
+    daemon_reload: yes
+    enabled: yes
+    name: grafana-server.service
+    state: restarted

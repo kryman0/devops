@@ -1,8 +1,8 @@
--
-  name: Set root password
-  user:
-    name: root
-    password: "{{ root_password }}"
+# -
+#   name: Set root password
+#   user:
+#     name: root
+#     password: "{{ root_password }}"
 
 -
   name: Uninstall old versions
@@ -50,13 +50,15 @@
     install_recommends: yes
   
 -
-  name: Pull the MySQL Docker container.
-  shell: docker pull mysql:latest
+  name: Pull the containers.
+  shell: | 
+    docker pull mysql:latest
+    docker pull prom/mysqld-exporter
 
 -
-  name: Stop the container.
+  name: Stop the containers.
   shell: |
-    docker stop mysql
+    docker stop mysql exporter
     docker container prune -f
   args:
     warn: no
@@ -68,7 +70,6 @@
     src: files/my.cnf
     dest: /home/deploy/mysql_custom.cnf
 
-# Wrapped the ninja templates with double quotes. If it won't work, I know why.
 -
   name: Start the MySQL Docker container.
   shell: |    
@@ -78,3 +79,23 @@
     -e MYSQL_ROOT_PASSWORD="{{ lookup('env', 'MYSQL_ROOT_PASSWORD') }}" mysql:latest
   args:
     executable: /bin/bash
+
+# -
+#   name: Create new user, exporter.
+#   shell: |
+#     docker exec -it mysql mysql -uroot -p"{{ lookup('env', 'MYSQL_ROOT_PASSWORD') }}" -D -Dmicroblog \
+#       -e "CREATE USER 'exporter'@'%' IDENTIFIED BY '{{ exporter_password }}' WITH MAX_USER_CONNECTIONS 3;" \
+#       -e "GRANT PROCESS, REPLICATION CLIENT, SELECT ON *.* TO 'exporter'@'%';" \
+#       -e "GRANT SELECT ON performance_schema.* TO 'exporter'@'%';"
+
+-
+  name: Start the Prometheus' MySQL Exporter Docker container.
+  shell: |    
+    docker run --name exporter -d -p 9104:9104 --network host \
+      -e DATA_SOURCE_NAME="exporter:"{{ exporter_password }}"@(localhost:3306)/" \
+      --restart always prom/mysqld-exporter:latest \
+      --collect.auto_increment.columns --collect.binlog_size --collect.engine_innodb_status \
+      --collect.engine_tokudb_status --collect.global_status
+  args:
+    executable: /bin/bash
+    warn: no

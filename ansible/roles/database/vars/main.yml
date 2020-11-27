@@ -1,2 +1,3 @@
 database_user: deploy
 root_password: $6$JZgwBdkKRQCYHN1j$Skm5EZ8h2um/jPMw2XPO63ZZhDWPfqWNj.zLMdLp6tAszQHNSjoA3zcBx8uKEYrViHabyq6GnYz/Gl5yCDoGu1
+exporter_password: "{{ lookup('env', 'MYSQL_EXPORTER_PASSWORD') }}"
