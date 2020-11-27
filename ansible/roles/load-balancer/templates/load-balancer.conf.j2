@@ -31,5 +31,9 @@ http {
        location / {
           proxy_pass http://{{ domain_name }};
        }
+
+       location /metrics {
+         stub_status on;
+       }
     }
 }

@@ -25,6 +25,9 @@
 #   name: Launch Prometheus as a background process.
 #   shell: ./prometheus-2.22.2.linux-amd64/prometheus &
 
+-
+  name: Reload Prometheus.
+  shell: killall -HUP prometheus
 
 # Grafana.
 # -

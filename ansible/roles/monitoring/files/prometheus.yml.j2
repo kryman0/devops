@@ -34,3 +34,17 @@ scrape_configs:
     static_configs:
       -
         targets: ['{{ groups['database'][0] }}:9104']
+
+  -
+    job_name: 'nginx'
+    metrics_path: '/prometheus'
+    scrape_interval: 2m
+    static_configs:
+      -
+        targets: ['{{ groups['appServer'][0] }}:9113']
+
+  -
+    job_name: 'helloworld_gunicorn'
+    static_configs:
+    -
+      targets: ['{{ groups['appServer'][0] }}:9102']
