@@ -54,10 +54,11 @@
   shell: |
     docker pull kryman/microblog:latest
     docker pull nginx/nginx-prometheus-exporter:0.4.2
+    docker pull prom/statsd-exporter
 
 -
   name: Stop the container if it's running.
-  command: docker stop microblog nginx-prometheus-exporter
+  command: docker stop microblog nginx-prometheus-exporter statsd-exporter
   ignore_errors: yes
 
 -
@@ -67,9 +68,9 @@
 -
   name: Start the microblog container.
   shell: |
-    docker run --restart=always --name microblog -d -p 8000:5000 \
-    -e DATABASE_URL=mysql+pymysql://microblog:"{{ lookup('env', 'MYSQL_PASSWORD') }}"@"{{ groups.database[0] }}"/microblog \
-    kryman/microblog:latest
+    docker run --restart=always --name microblog --network=host -d \
+      -e DATABASE_URL=mysql+pymysql://microblog:"{{ lookup('env', 'MYSQL_PASSWORD') }}"@"{{ groups.database[0] }}"/microblog \
+      kryman/microblog:latest
   args:
     executable: /bin/bash
 
@@ -81,6 +82,21 @@
         -nginx.scrape-uri=https://"{{ domain_name }}"/metrics \
         -nginx.retries=10 \
         -nginx.ssl-verify=false \
-        -web.telemetry-path=/prometheus
+        -web.telemetry-path=/prometheus  
+  args:
+    executable: /bin/bash
+
+-
+  name: Copy the configuration file for the statsd-prometheus-exporter container.
+  copy:
+    src: files/statsd.conf
+    dest: statsd.conf
+
+-
+  name: Start the statsd-prometheus-exporter container.
+  shell: |
+    docker run --name statsd-exporter -dP --network=host \
+      -v /home/"{{ deploy_user }}"/statsd.conf:/statsd/statsd.conf prom/statsd-exporter \
+        "--statsd.mapping-config=/statsd/statsd.conf"
   args:
     executable: /bin/bash

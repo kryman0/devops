@@ -44,11 +44,11 @@
 #   name: Create directories in /etc/nginx/.
 #   shell: mkdir /etc/nginx/sites-available /etc/nginx/sites-enabled
 
-# -  
-#   name: Setup load-balancer.conf.  
-#   template:
-#     src: ../templates/load-balancer.conf.j2
-#     dest: /etc/nginx/sites-available/load-balancer.conf
+-  
+  name: Setup load-balancer.conf.  
+  template:
+    src: ../templates/load-balancer.conf.j2
+    dest: /etc/nginx/sites-available/load-balancer.conf
 
 # -
 #   name: Create a symbolic link from load-balancer.conf to the sites-enabled folder.
@@ -57,9 +57,9 @@
 #     path: /etc/nginx/sites-enabled/load-balancer.conf
 #     state: link
 
-# -
-#   name: Restart nginx.
-#   systemd: 
-#     enabled: yes
-#     name: nginx
-#     state: reloaded
+-
+  name: Restart nginx.
+  systemd: 
+    enabled: yes
+    name: nginx
+    state: reloaded
