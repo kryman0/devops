@@ -7,23 +7,26 @@ orbs:
 jobs:
   snyk:
     docker: 
-      - image: circleci/python:3.5
+      - image: circleci/python:3.7
     
     steps:
       - checkout
 
       -
         run:
+          name: install venv
+          command: python3 -m venv venv
+      
+      # Make CircleCi automatically load venv so snyk can check deps.
+      - run: echo "source venv/bin/activate" >> $BASH_ENV
+      
+      -
+        run: 
           name: install dependencies
-          command: |
-            python3 -m venv venv
-            . venv/bin/activate
+          command: |            
             pip install --upgrade pip
-            make install
-      
-       # Make CircleCi automatically load venv so snyk can check deps.
-      - run: echo "source ~/venv/bin/activate" >> $BASH_ENV
-      
+            make install      
+       
       - snyk/scan
 
 
