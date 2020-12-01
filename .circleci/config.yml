@@ -69,6 +69,7 @@ jobs:
       - 
         snyk/scan:
           docker-image-name: kryman/microblog:latest
+          additional-arguments: "--policy-path=.snyk"
 
       # Step 6. Push the docker image to dockerhub.
       -
