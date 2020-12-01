@@ -18,10 +18,11 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
+            pip install --upgrade pip
             make install
       
        # Make CircleCi automatically load venv so snyk can check deps.
-      - run: echo "source ~/repo/venv/bin/activate" >> $BASH_ENV
+      - run: echo "source ~/venv/bin/activate" >> $BASH_ENV
       
       - snyk/scan
 
