@@ -111,6 +111,11 @@ validate-ci:
 	@circleci config validate
 
 
+# target: bandit			      - Run bandit on app folder.
+.PHONY: bandit
+bandit:
+	@bandit -r app
+
 
 # target: test-integration             - Run tests in tests/integration with coverage.py
 .PHONY: test-integration
@@ -163,6 +168,7 @@ test:
 		-v $(CURDIR)/app:/home/microblog_test/app \
 		-v $(CURDIR)/tests:/home/microblog_test/tests \
 		kryman/microblog_test:latest
+	@bandit -c .bandit.yml -r tests/
 
 
 

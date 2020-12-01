@@ -55,6 +55,7 @@ jobs:
           command: |
             source venv/bin/activate
             make test
+            make bandit
       
       # Step 4: If all tests succeeds, build the production
       # docker image.
