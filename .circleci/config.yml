@@ -1,7 +1,31 @@
 # Python CircleCI 2.0 configuration file.
 version: 2.1
 
+orbs:
+  snyk: snyk/snyk@0.0.8
+
 jobs:
+  snyk:
+    docker: 
+      - image: circleci/python:3.5
+    
+    steps:
+      - checkout
+
+      -
+        run:
+          name: install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            make install
+      
+       # Make CircleCi automatically load venv so snyk can check deps.
+      - run: echo "source ~/repo/venv/bin/activate" >> $BASH_ENV
+      
+      - snyk/scan
+
+
   build:
     machine: 
         image: ubuntu-2004:202010-01
@@ -72,8 +96,11 @@ workflows:
   version: 2.1  
   test_and_build-docker:
     jobs:
+      - snyk
       - 
         build:
+          requires:
+            - snyk
           context: all_projects
           filters:
             branches:
