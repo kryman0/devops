@@ -111,11 +111,18 @@ validate-ci:
 	@circleci config validate
 
 
+
 # target: bandit			      - Run bandit on app folder.
 .PHONY: bandit
 bandit:
 	@bandit -r app
 
+
+
+# target: zap			      - Run zap on microblog.
+.PHONY: zap
+zap:
+	@docker run --name zap --rm owasp/zap2docker-weekly zap-baseline.py -t https://www.manczak.me
 
 # target: test-integration             - Run tests in tests/integration with coverage.py
 .PHONY: test-integration
