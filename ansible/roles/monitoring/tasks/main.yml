@@ -15,19 +15,19 @@
 
 #     tar xvzf prometheus-2.22.2.linux-amd64.tar.gz
 
-# -
-#   name: Change the configuration.
-#   template:
-#     src: files/prometheus.yml.j2
-#     dest: prometheus-2.22.2.linux-amd64/prometheus.yml
+-
+  name: Change the configuration.
+  template:
+    src: files/prometheus.yml.j2
+    dest: prometheus-2.22.2.linux-amd64/prometheus.yml
 
 # -
 #   name: Launch Prometheus as a background process.
 #   shell: ./prometheus-2.22.2.linux-amd64/prometheus &
 
-# -
-#   name: Reload Prometheus.
-#   shell: killall -HUP prometheus
+-
+  name: Reload Prometheus.
+  shell: killall -HUP prometheus
 
 # Grafana.
 # -
@@ -48,16 +48,21 @@
 #   apt:
 #     deb: grafana_7.3.4_amd64.deb
 
--
-  name: Change the grafana configuration.
-  template:
-    src: files/grafana.ini.j2
-    dest: /etc/grafana/grafana.ini
+# -
+#   name: Change the grafana configuration.
+#   template:
+#     src: files/grafana.ini.j2
+#     dest: /etc/grafana/grafana.ini
 
--
-  name: Start the server with systemd.
-  systemd:
-    daemon_reload: yes
-    enabled: yes
-    name: grafana-server.service
-    state: restarted
+# -
+#   name: Start the server with systemd.
+#   systemd:
+#     daemon_reload: yes
+#     enabled: yes
+#     name: grafana-server.service
+#     state: restarted
+
+# -
+#   name: Debugging.
+#   debug:
+#     msg: "{{ my_ip }}, {{ groups['monitoring'][0] }}/32"

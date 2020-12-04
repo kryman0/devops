@@ -1,10 +1,11 @@
 -
   hosts:
-    # - database
-    # - appServer
-    # - loadBalancer
+    - database
+    - appServer
+    - loadBalancer
     - monitoring
-  remote_user: azureuser
+  # remote_user: azureuser
+  remote_user: "{{ deploy_user }}"
   become: yes
   become_method: sudo
   roles:

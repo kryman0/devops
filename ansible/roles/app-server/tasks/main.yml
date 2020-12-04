@@ -49,54 +49,54 @@
 #       - containerd.io
 #     install_recommends: yes
 
--
-  name: Pull the containers.
-  shell: |
-    docker pull kryman/microblog:latest
-    docker pull nginx/nginx-prometheus-exporter:0.4.2
-    docker pull prom/statsd-exporter
+# -
+#   name: Pull the containers.
+#   shell: |
+#     docker pull kryman/microblog:latest
+#     docker pull nginx/nginx-prometheus-exporter:0.4.2
+#     docker pull prom/statsd-exporter
 
--
-  name: Stop the container if it's running.
-  command: docker stop microblog nginx-prometheus-exporter statsd-exporter
-  ignore_errors: yes
+# -
+#   name: Stop the container if it's running.
+#   command: docker stop microblog nginx-prometheus-exporter statsd-exporter
+#   ignore_errors: yes
 
--
-  name: Remove all stopped containers .
-  command: docker container prune -f
+# -
+#   name: Remove all stopped containers .
+#   command: docker container prune -f
 
--
-  name: Start the microblog container.
-  shell: |
-    docker run --restart=always --name microblog --network=host -d \
-      -e DATABASE_URL=mysql+pymysql://microblog:"{{ lookup('env', 'MYSQL_PASSWORD') }}"@"{{ groups.database[0] }}"/microblog \
-      kryman/microblog:latest
-  args:
-    executable: /bin/bash
+# -
+#   name: Start the microblog container.
+#   shell: |
+#     docker run --restart=always --name microblog --network=host -d \
+#       -e DATABASE_URL=mysql+pymysql://microblog:"{{ lookup('env', 'MYSQL_PASSWORD') }}"@"{{ groups.database[0] }}"/microblog \
+#       kryman/microblog:latest
+#   args:
+#     executable: /bin/bash
 
--
-  name: Start the nginx-prometheus-exporter container.
-  shell: |
-    docker run --name nginx-prometheus-exporter --restart always -d -p 9113:9113 \
-      nginx/nginx-prometheus-exporter:0.4.2 \
-        -nginx.scrape-uri=https://"{{ domain_name }}"/metrics \
-        -nginx.retries=10 \
-        -nginx.ssl-verify=false \
-        -web.telemetry-path=/prometheus  
-  args:
-    executable: /bin/bash
+# -
+#   name: Start the nginx-prometheus-exporter container.
+#   shell: |
+#     docker run --name nginx-prometheus-exporter --restart always -d -p 9113:9113 \
+#       nginx/nginx-prometheus-exporter:0.4.2 \
+#         -nginx.scrape-uri=https://"{{ domain_name }}"/metrics \
+#         -nginx.retries=10 \
+#         -nginx.ssl-verify=false \
+#         -web.telemetry-path=/prometheus  
+#   args:
+#     executable: /bin/bash
 
--
-  name: Copy the configuration file for the statsd-prometheus-exporter container.
-  copy:
-    src: files/statsd.conf
-    dest: statsd.conf
+# -
+#   name: Copy the configuration file for the statsd-prometheus-exporter container.
+#   copy:
+#     src: files/statsd.conf
+#     dest: statsd.conf
 
--
-  name: Start the statsd-prometheus-exporter container.
-  shell: |
-    docker run --name statsd-exporter -dP --network=host \
-      -v /home/"{{ deploy_user }}"/statsd.conf:/statsd/statsd.conf prom/statsd-exporter \
-        "--statsd.mapping-config=/statsd/statsd.conf"
-  args:
-    executable: /bin/bash
+# -
+#   name: Start the statsd-prometheus-exporter container.
+#   shell: |
+#     docker run --name statsd-exporter -dP --network=host \
+#       -v /home/"{{ deploy_user }}"/statsd.conf:/statsd/statsd.conf prom/statsd-exporter \
+#         "--statsd.mapping-config=/statsd/statsd.conf"
+#   args:
+#     executable: /bin/bash

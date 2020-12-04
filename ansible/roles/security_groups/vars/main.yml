@@ -31,28 +31,36 @@ sg_groups:
             access: Allow
             priority: 1001
             direction: Inbound
-            source_address_prefix: '0.0.0.0/0'
+            # source_address_prefix: '0.0.0.0/0'            
+            source_address_prefix: "{{ my_ip }}"
         -   name: HTTP
             protocol: Tcp
             destination_port_range: 5000
             access: Allow
             priority: 1002
             direction: Inbound
-            source_address_prefix: '0.0.0.0/0'
+            # source_address_prefix: '0.0.0.0/0'
+            source_address_prefix: "{{ groups['loadBalancer'][0] }}/32"
         -   name: nginx-exporter
             protocol: Tcp
             destination_port_range: 9113
             access: Allow
             priority: 1003
             direction: Inbound
-            source_address_prefix: '0.0.0.0/0'
+            # source_address_prefix: '0.0.0.0/0'
+            source_address_prefix: 
+                - "{{ my_ip }}"
+                - "{{ groups['monitoring'][0] }}/32"
         -   name: statsd-exporter
             protocol: Tcp
             destination_port_range: 9102
             access: Allow
             priority: 1004
             direction: Inbound
-            source_address_prefix: '0.0.0.0/0'
+            # source_address_prefix: '0.0.0.0/0'
+            source_address_prefix: 
+                - "{{ my_ip }}"
+                - "{{ groups['monitoring'][0] }}/32"
     -   name: database
         port_rules:
         -   name: SSH
@@ -61,21 +69,26 @@ sg_groups:
             access: Allow
             priority: 1001
             direction: Inbound
-            source_address_prefix: '0.0.0.0/0'
+            # source_address_prefix: '0.0.0.0/0'
+            source_address_prefix: "{{ my_ip }}"
         -   name: MYSQL
             protocol: Tcp
             destination_port_range: 3306
             access: Allow
             priority: 1002
             direction: Inbound
-            source_address_prefix: '0.0.0.0/0'
+            # source_address_prefix: '0.0.0.0/0'
+            source_address_prefix: "{{ groups['appServer'][0] }}/32"
         -   name: exporter
             protocol: Tcp
             destination_port_range: 9104
             access: Allow
             priority: 1003
             direction: Inbound
-            source_address_prefix: '0.0.0.0/0'
+            # source_address_prefix: '0.0.0.0/0'
+            source_address_prefix: 
+                - "{{ my_ip }}"
+                - "{{ groups['monitoring'][0] }}/32"
     -   name: monitoring
         port_rules:
         -   name: SSH
@@ -84,32 +97,41 @@ sg_groups:
             access: Allow
             priority: 1001
             direction: Inbound
-            source_address_prefix: '0.0.0.0/0'
+            # source_address_prefix: '0.0.0.0/0'
+            source_address_prefix: "{{ my_ip }}"
         -   name: gui
             protocol: Tcp
             destination_port_range: 9090
             access: Allow
             priority: 1002
             direction: Inbound
-            source_address_prefix: '0.0.0.0/0'
+            # source_address_prefix: '0.0.0.0/0'
+            source_address_prefix: 
+                - "{{ my_ip }}"
+                - "{{ groups['monitoring'][0] }}/32"
         -   name: alert
             protocol: Tcp
             destination_port_range: 9093
             access: Allow
             priority: 1003
             direction: Inbound
-            source_address_prefix: '0.0.0.0/0'
+            # source_address_prefix: '0.0.0.0/0'
+            source_address_prefix: "{{ my_ip }}"
         -   name: grafana
             protocol: Tcp
             destination_port_range: 3000
             access: Allow
             priority: 1004
             direction: Inbound
-            source_address_prefix: '0.0.0.0/0'            
+            # source_address_prefix: '0.0.0.0/0'
+            source_address_prefix: "{{ groups['loadBalancer'][0] }}/32"
         -   name: node_exporter
             protocol: Tcp
             destination_port_range: 9100
             access: Allow
             priority: 1005
             direction: Inbound
-            source_address_prefix: '0.0.0.0/0'
+            # source_address_prefix: '0.0.0.0/0'
+            source_address_prefix: 
+                - "{{ my_ip }}"
+                - "{{ groups['monitoring'][0] }}/32"

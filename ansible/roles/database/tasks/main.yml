@@ -4,81 +4,81 @@
 #     name: root
 #     password: "{{ root_password }}"
 
--
-  name: Uninstall old versions
-  shell: |
-    apt-get remove docker docker-engine docker.io containerd runc
-  args:
-    executable: /bin/bash
-    warn: no
-  ignore_errors: yes
+# -
+#   name: Uninstall old versions
+#   shell: |
+#     apt-get remove docker docker-engine docker.io containerd runc
+#   args:
+#     executable: /bin/bash
+#     warn: no
+#   ignore_errors: yes
 
--
-  name: Set up the repository 1/2.
-  apt:
-    force_apt_get: yes
-    update_cache: yes
-    name:
-      - apt-transport-https
-      - ca-certificates
-      - curl
-      - gnupg-agent
-      - software-properties-common
-    install_recommends: yes
+# -
+#   name: Set up the repository 1/2.
+#   apt:
+#     force_apt_get: yes
+#     update_cache: yes
+#     name:
+#       - apt-transport-https
+#       - ca-certificates
+#       - curl
+#       - gnupg-agent
+#       - software-properties-common
+#     install_recommends: yes
 
--
-  name: Set up the repository 2/2.
-  shell: |
-    curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
-    add-apt-repository \
-    "deb [arch=amd64] https://download.docker.com/linux/debian \
-    $(lsb_release -cs) \
-    stable"
-  args:
-    executable: /bin/bash
-    warn: no
+# -
+#   name: Set up the repository 2/2.
+#   shell: |
+#     curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+#     add-apt-repository \
+#     "deb [arch=amd64] https://download.docker.com/linux/debian \
+#     $(lsb_release -cs) \
+#     stable"
+#   args:
+#     executable: /bin/bash
+#     warn: no
 
--
-  name: Install Docker Engine.
-  apt:
-    force_apt_get: yes
-    update_cache: yes
-    name:
-      - docker-ce
-      - docker-ce-cli
-      - containerd.io
-    install_recommends: yes
+# -
+#   name: Install Docker Engine.
+#   apt:
+#     force_apt_get: yes
+#     update_cache: yes
+#     name:
+#       - docker-ce
+#       - docker-ce-cli
+#       - containerd.io
+#     install_recommends: yes
   
--
-  name: Pull the containers.
-  shell: | 
-    docker pull mysql:latest
-    docker pull prom/mysqld-exporter
+# -
+#   name: Pull the containers.
+#   shell: | 
+#     docker pull mysql:latest
+#     docker pull prom/mysqld-exporter
 
--
-  name: Stop the containers.
-  shell: |
-    docker stop mysql exporter
-    docker container prune -f
-  args:
-    warn: no
-  ignore_errors: yes
+# -
+#   name: Stop the containers.
+#   shell: |
+#     docker stop mysql exporter
+#     docker container prune -f
+#   args:
+#     warn: no
+#   ignore_errors: yes
 
--
-  name: Copy the configration file.
-  copy:
-    src: files/my.cnf
-    dest: /home/deploy/mysql_custom.cnf
+# -
+#   name: Copy the configration file.
+#   copy:
+#     src: files/my.cnf
+#     dest: /home/deploy/mysql_custom.cnf
 
--
-  name: Start the MySQL Docker container.
-  shell: |    
-    docker run --restart=always --name mysql --ip="{{ groups.database[0] }}" -d -p 3306:3306 \
-    -v /home/"{{ deploy_user }}"/data/mysql/dbs/microblog:/var/lib/mysql -v /home/"{{ deploy_user }}":/etc/mysql/conf.d \
-    -e MYSQL_DATABASE=microblog -e MYSQL_USER=microblog -e MYSQL_PASSWORD="{{ lookup('env', 'MYSQL_PASSWORD') }}" \
-    -e MYSQL_ROOT_PASSWORD="{{ lookup('env', 'MYSQL_ROOT_PASSWORD') }}" mysql:latest
-  args:
-    executable: /bin/bash
+# -
+#   name: Start the MySQL Docker container.
+#   shell: |    
+#     docker run --restart=always --name mysql --ip="{{ groups.database[0] }}" -d -p 3306:3306 \
+#     -v /home/"{{ deploy_user }}"/data/mysql/dbs/microblog:/var/lib/mysql -v /home/"{{ deploy_user }}":/etc/mysql/conf.d \
+#     -e MYSQL_DATABASE=microblog -e MYSQL_USER=microblog -e MYSQL_PASSWORD="{{ lookup('env', 'MYSQL_PASSWORD') }}" \
+#     -e MYSQL_ROOT_PASSWORD="{{ lookup('env', 'MYSQL_ROOT_PASSWORD') }}" mysql:latest
+#   args:
+#     executable: /bin/bash
 
 # -
 #   name: Create new user, exporter.
@@ -88,14 +88,14 @@
 #       -e "GRANT PROCESS, REPLICATION CLIENT, SELECT ON *.* TO 'exporter'@'%';" \
 #       -e "GRANT SELECT ON performance_schema.* TO 'exporter'@'%';"
 
--
-  name: Start the Prometheus' MySQL Exporter Docker container.
-  shell: |    
-    docker run --name exporter -d -p 9104:9104 --network host \
-      -e DATA_SOURCE_NAME="exporter:"{{ exporter_password }}"@(localhost:3306)/" \
-      --restart always prom/mysqld-exporter:latest \
-      --collect.auto_increment.columns --collect.binlog_size --collect.engine_innodb_status \
-      --collect.engine_tokudb_status --collect.global_status
-  args:
-    executable: /bin/bash
-    warn: no
+# -
+#   name: Start the Prometheus' MySQL Exporter Docker container.
+#   shell: |    
+#     docker run --name exporter -d -p 9104:9104 --network host \
+#       -e DATA_SOURCE_NAME="exporter:"{{ exporter_password }}"@(localhost:3306)/" \
+#       --restart always prom/mysqld-exporter:latest \
+#       --collect.auto_increment.columns --collect.binlog_size --collect.engine_innodb_status \
+#       --collect.engine_tokudb_status --collect.global_status
+#   args:
+#     executable: /bin/bash
+#     warn: no

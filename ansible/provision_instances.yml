@@ -1,8 +1,16 @@
 # Provision servers on Azure
 ---
--   hosts: local
+-   hosts: 
+    - local
+    # - appServer
+    # - database
+    # - loadBalancer
+    # - monitoring
     connection: local # Keep ansible from open ssh connection
     gather_facts: False
-    no_log: True
+    # no_log: True
+    no_log: False
     roles:
         -   provision_instances
+        -   gather_vm_instances
+        -   security_groups

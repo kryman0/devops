@@ -160,22 +160,20 @@ exec-tests: test-unit test-integration
 
 
 
-# # target: test                         - Run tests and display code coverage
-# .PHONY: test
-# test: validate exec-tests
-# 	${py} -m coverage report  --rcfile=.coveragerc
-# 	$(MAKE) clean-cov
+# target: test-for-docker	      - Run tests and display code coverage
+.PHONY: test-for-docker
+test-for-docker: validate exec-tests
+	${py} -m coverage report  --rcfile=.coveragerc
+	$(MAKE) clean-cov
 
 
 
 # target: test                         - Run tests in Docker and display code coverage
 .PHONY: test
-test:	
-	@docker run --rm \
-		-v $(CURDIR)/app:/home/microblog_test/app \
-		-v $(CURDIR)/tests:/home/microblog_test/tests \
+test:
+	@docker run --name microblog_test --rm \
+		-v $(CURDIR)/app:/home/microblog_test/app -v $(CURDIR)/tests:/home/microblog_test/tests \
 		kryman/microblog_test:latest
-	@bandit -c .bandit.yml -r tests/
 
 
 
