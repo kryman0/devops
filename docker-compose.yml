@@ -19,12 +19,15 @@ services:
       context: ./
       dockerfile: ./docker/Dockerfile_prod
     
-    image: kryman/microblog:latest
+    image: kryman/microblog:no-statsd
 
     container_name: microblog
 
+    environment: 
+      DATABASE_URL: mysql+pymysql://microblog:kry_db@mysql/microblog
+
     ports:
-      - "8000:5000"
+      - "5000:5000"
     
     networks: 
       - microblog-network
@@ -40,7 +43,7 @@ services:
     env_file: mysql.env
 
     volumes: 
-      - /var/lib/mysql:/var/lib/mysql
+      - /home/kryman/data/dbs/mysql/microblog:/var/lib/mysql
     
     networks: 
       - microblog-network

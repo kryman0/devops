@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microblog
+  labels:
+    app: microblog
+ 
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: microblog
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels: 
+        app: microblog
+    spec:      
+      containers:
+        -
+          env:
+            -
+              name: DATABASE_URL
+              valueFrom: 
+                secretKeyRef:
+                  key: DATABASE_URL
+                  name: microblog-secret
+          image: kryman/microblog:no-statsd
+          name: microblog
+          ports:
+            - 
+              containerPort: 5000
+              
