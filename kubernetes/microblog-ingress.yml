@@ -13,6 +13,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: microblog
-                port:
+                name: microblog-service
+                port: 
                   name: http

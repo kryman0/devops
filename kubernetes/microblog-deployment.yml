@@ -19,6 +19,10 @@ spec:
     spec:      
       containers:
         -
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5000
           env:
             -
               name: DATABASE_URL
@@ -31,4 +35,3 @@ spec:
           ports:
             - 
               containerPort: 5000
-              
